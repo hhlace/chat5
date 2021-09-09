@@ -1,0 +1,185 @@
+openapi: 3.0.1
+info:
+  title: Chat 5
+  description: 'Rutas para app de chat usando web sockets.'
+  version: 1.0.0
+tags:
+- name: user
+  description: Información de los usuarios de la aplicación
+- name: channel
+  description: Manejo de productos del supermercado
+paths:
+  
+  /user/register:
+    post:
+      tags:
+      - user
+      description: Registra un nuevo usuario
+      operationId: register
+      requestBody:
+        description: Objeto con data del usuario a crear
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        201:
+          description: Operación exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        400:
+          description: Input incorrecto
+          
+  /user/login:
+    post:
+      tags:
+      - user
+      description: Loguea usuario existente a traves de userName y password
+      operationId: login
+      requestBody:
+        description: Objeto con userName y password
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        200:
+          description: Usuario logueado
+          content:
+            jwt:
+              schema:
+                $ref: '#/components/schemas/User'
+        400:
+          description: contraseña invalida
+          content: {}
+        404:
+          description: Usuario no encontrado
+          content: {}
+          
+  /user/{userId}:
+    delete:
+      tags:
+      - user
+      description: Eliminar usuario, solo posible si se es dicho usuario
+      operationId: deleteUser
+      parameters:
+      - name: userId
+        in: path
+        description: ID del usuario a eliminar
+        required: true
+        schema:
+          type: string
+      responses:
+        204:
+          description: Operación exitosa
+        400:
+          description: ID de usuario inválido
+          content: {}
+        404:
+          description: Usuario no encontrado
+          content: {}
+          
+  /user/{id}:
+    put:
+      tags:
+      - user
+      description: Modificar usuario
+      operationId: updateUser
+      parameters:
+      - name: id
+        in: path
+        description: ID del usuario a modificar
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: nuevo userName y contraseaña
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        200:
+          description: user 
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        400:
+          description: ID de usuario inválido
+          content: {}
+        404:
+          description: Usuario no encontrado
+          content: {}
+          
+  /channels/{userId}:
+    get:
+      tags:
+      - channel
+      description: Traer todos los canales del usuario logueado
+      operationId: getUserChannels
+      parameters:
+      - name: userId
+        in: path
+        description: ID del usuario logueado
+        required: true
+        schema: 
+          type: string
+      responses:
+        200:
+          description: Todos los canales de los usuarios
+          content:
+            aplication/json:
+              schema:
+                $ref: '#/components/schemas/Users-Channels'
+        404:
+          description: Usuario no encontrado
+          content: {}
+
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        username:
+          type: string
+        password:
+          type: string
+    Channel:
+      required:
+      - name
+      - admin
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+          example: Futbol 5
+        admin:
+          type: string
+          example: 1
+    Users-Channels:
+      type: object
+      properties:
+        userId:
+          type: string
+          example: 1
+        channelId:
+          type: string
+          example: 100
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

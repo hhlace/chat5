@@ -1,4 +1,6 @@
 const { userService } = require('../services')
+const jwt = require('jsonwebtoken')
+const { User } = require('../models')
 
 const userController = {
     async register(req, res) {
@@ -18,11 +20,19 @@ const userController = {
     },
     async login(req, res) {
         try {
-            const user = await User.findOne({
+            await User.findOne({
                 where: { userName: req.userName },
             }).then((user) => {
-                // Aca falta codigo login
-                res.sendStatus(200)
+                const validPass = userService.validatePassword(
+                    req.body.password,
+                )
+                if (validPass) {
+                    const token = jwt.sign(
+                        { id: user.id },
+                        process.env.TOKEN_SECRET,
+                    )
+                    res.status(200).header('auth-token', token).send(token)
+                }
             })
         } catch (e) {
             res.status(400).json({ success: false, error: e })
