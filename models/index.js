@@ -1,5 +1,11 @@
-const User = require('./user')
+const User = require('./user.model')
+const Text = require('./text.model')
+const Post = require('./post.model')
+const Poll = require('./poll.model')
+const Media = require('./media.model')
+const Event = require('./event.model')
+const Channel = require('./channel.model')
 
 // Customer.hasMany(Package, { foreignKey: `customerId`, as: "packages" });
 
-module.exports = { User }
+module.exports = { User, Text, Post, Poll, Media, Event, Channel }

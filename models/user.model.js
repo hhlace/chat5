@@ -8,6 +8,7 @@ User.init(
         userName: {
             type: Sequelize.STRING,
             allowNull: false,
+            field: 'user_name',
         },
         password: {
             type: Sequelize.STRING,
