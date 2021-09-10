@@ -122,7 +122,6 @@ paths:
       tags:
       - channel
       description: Traer todos los canales del usuario logueado
-      operationId: getUserChannels
       parameters:
       - name: userId
         in: path
@@ -140,8 +139,92 @@ paths:
         404:
           description: Usuario no encontrado
           content: {}
+          
+  /channel/{channelId}:
+    get:
+      tags:
+      - channel
+      description: Traer todos los mensajes del canal
+      parameters:
+      - name: channelId
+        in: path
+        description: ID del canal
+        required: true
+        schema: 
+          type: string
+      responses:
+        200:
+          description: Todos los mensajes del canal.
+          content:
+            aplication/json:
+              schema:
+                ##$ref: '#/components/schemas/ArrayOfPosts'  ----
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: The user ID.
+                  message:
+                    type: string
+                    description: Mensajes del canal
+        404:
+          description: Usuario no encontrado
+          content: {}
 
-
+  /channels/addUser/{channelId}:
+    post:
+      tags:
+      - channel
+      description: Agregar usuario a canal
+      parameters:
+        - name: channelId
+          in: path
+          required: true
+          schema:
+            type : integer
+            format: int64
+            minimum: 1
+      responses:
+        '200':
+          description: Usuario agregado.
+        '400':
+          description: userId invalido.
+        '404':
+          description: Usuario no encontrado
+        default:
+          description: Unexpected error
+            
+  /channles/{channelId}/post/:
+    post:
+      tags:
+      - channel
+      description: Post a canal
+      parameters:
+      - name: channelId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        description: Optional description in *Markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Users-Channels'
+          # aca va un one of: -tipos de posteos
+          
+      responses:
+        '200':
+          description: Post exitoso.
+        '400':
+          description: Error al mandar post.
+        '404':
+          description: Error de conexion
+        default:
+          description: Unexpected error
+        
 components:
   schemas:
     User:
