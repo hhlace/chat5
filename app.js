@@ -20,7 +20,7 @@ app.use((err, req, res, next) => {
     res.status(500).send('Internal server error')
 })
 
-db.sync({ force: true }).then(() => {
+db.sync({ force: false }).then(() => {
     app.listen(port, () => {
         console.log(`Chat 5 listening on port ${port}!`)
     })
