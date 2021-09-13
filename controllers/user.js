@@ -1,6 +1,7 @@
 const { userService } = require('../services')
 const jwt = require('jsonwebtoken')
 const { User } = require('../models')
+require('dotenv').config()
 
 const userController = {
     async register(req, res) {
@@ -21,17 +22,20 @@ const userController = {
     async login(req, res) {
         try {
             await User.findOne({
-                where: { userName: req.userName },
+                where: { userName: req.body.userName },
             }).then((user) => {
-                const validPass = userService.validatePassword(
-                    req.body.password,
-                )
+                const validPass = user.validPassword(req.body.password)
                 if (validPass) {
                     const token = jwt.sign(
-                        { id: user.id },
+                        { _id: user.id },
                         process.env.TOKEN_SECRET,
                     )
-                    res.status(200).header('auth-token', token).send(token)
+                    res.header('auth-token', token).send({
+                        id: user.id,
+                        userName: user.userName,
+                    })
+                } else {
+                    res.status(404).send('Email o contraseña erroneo')
                 }
             })
         } catch (e) {

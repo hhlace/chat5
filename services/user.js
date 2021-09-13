@@ -20,15 +20,19 @@ const userService = {
             return false
         }
     },
-    async login(body) {
-        await User.findOne({
-            where: { userName: body.userName },
-        }).then((user) => {
-            let validPass = user.validPassword(body.password)
-            if (validPass) return user
-            return null
-        })
-        return
+    // async login(body) {
+    //     await User.findOne({
+    //         where: { userName: body.userName },
+    //     }).then((user) => {
+    //         let validPass = user.validPassword(body.password)
+    //         if (validPass) return user
+    //         return null
+    //     })
+    //     return
+    // },
+    async validatePassword(password) {
+        const valid = await User.validPassword(password)
+        return valid
     },
 }
 module.exports = userService
