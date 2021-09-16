@@ -1,3 +1,5 @@
 const userController = require('./user')
 
-module.exports = { userController }
+const channelController = require('./channel')
+
+module.exports = { userController, channelController }
