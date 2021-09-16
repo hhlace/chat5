@@ -6,6 +6,6 @@ const Media = require('./media.model')
 const Event = require('./event.model')
 const Channel = require('./channel.model')
 
-// Customer.hasMany(Package, { foreignKey: `customerId`, as: "packages" });
+User.belongsToMany(Channel, { through: 'ChannelUsers' })
 
 module.exports = { User, Text, Post, Poll, Media, Event, Channel }

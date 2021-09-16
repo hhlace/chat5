@@ -42,6 +42,17 @@ const userController = {
             res.status(400).json({ success: false, error: e })
         }
     },
+    async getUser(req, res) {
+        const userId = req.decoded._id
+        const userChannel = await User.findByPk(userId, {
+            attributes: ['userName', 'id'],
+        })
+        if (userChannel) {
+            res.status(200).json(userChannel)
+        } else {
+            res.status(403).send('Usuario no encontrado')
+        }
+    },
 }
 
 module.exports = userController
