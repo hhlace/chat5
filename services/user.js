@@ -13,7 +13,7 @@ const userService = {
     },
     async exists(userName) {
         try {
-            const user = await User.findOne({ where: { userName: userName } })
+            const user = await User.findOne({ where: { userName } })
             if (user) return true
             return false
         } catch (e) {

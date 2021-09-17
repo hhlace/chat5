@@ -9,6 +9,7 @@ User.init(
             type: Sequelize.STRING,
             allowNull: false,
             field: 'user_name',
+            unique: true,
         },
         password: {
             type: Sequelize.STRING,
