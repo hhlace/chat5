@@ -6,7 +6,7 @@ require('dotenv').config()
 const userController = {
     async register(req, res) {
         try {
-            const exists = await userService.exists(req.userName)
+            const exists = await userService.exists(req.body.userName)
             if (!exists) {
                 const newUser = await userService.register(req.body)
                 res.status(201).send(newUser)
