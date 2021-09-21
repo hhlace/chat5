@@ -8,5 +8,6 @@ const Channel = require('./channel.model')
 
 User.belongsToMany(Channel, { through: 'ChannelUsers' })
 Channel.belongsToMany(User, { through: 'ChannelUsers' })
+// Text.belongsTo(Post, )
 
 module.exports = { User, Text, Post, Poll, Media, Event, Channel }
