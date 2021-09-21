@@ -26,6 +26,24 @@ const channelController = {
             })
             .catch((e) => console.log('Error agregando usuario', e))
     },
+    async getChannels(req, res) {
+        const userId = req.decoded._id
+        const channelsIds = await User.findByPk(userId, {
+            include: Channel,
+        })
+            .then((user) => user.channels)
+            .then((channels) =>
+                channels.map((channel) => channel.dataValues.id),
+            )
+        console.log('🚀🚀 \n ---> channelsIds', channelsIds)
+
+        const channels = await channelsIds.map((channel) =>
+            Channel.findByPk(channel),
+        )
+
+        const channelsPromise = await Promise.all(channels)
+        res.send(channelsPromise)
+    },
 }
 
 module.exports = channelController

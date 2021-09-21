@@ -15,4 +15,10 @@ router.post(
     channelController.addUser,
 )
 
+router.get(
+    '/getchannels',
+    jwtMiddleware.validateAuthentication,
+    channelController.getChannels,
+)
+
 module.exports = router
